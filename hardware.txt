@@ -1,0 +1,17 @@
+Host used for every number in the article (read on the Mac mini on 2026-10-29 with sysctl / sw_vers)
+
+hw.model                  Mac14,3 (Mac mini)
+machdep.cpu.brand_string  Apple M2
+hw.perflevel0.physicalcpu 4   (performance cores)
+hw.perflevel1.physicalcpu 4   (efficiency cores)
+hw.memsize                8589934592 (8 GiB)
+macOS                     26.5.2 (build 25F84)
+kern.num_taskthreads      2048  (per-process thread limit; the Go/LanceDB crash hits this)
+kern.num_threads          10240
+kern.maxproc              2000
+kern.maxprocperuid        1333
+
+Run conditions: on AC power, kept awake with `caffeinate -dimsu`; no CPU pinning (macOS has no affinity API on Apple
+silicon), so the API server, Postgres and the vegeta load generator share all 8 cores. Swap is the macOS compressor plus
+swap files on the boot volume. The owner's normal apps were open during parts of the main run (see the article's
+methods section and data/analysis/host_timeline_hourly.csv).

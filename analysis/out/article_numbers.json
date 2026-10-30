@@ -1,0 +1,370 @@
+{
+ "fullmac_runs": 1342,
+ "fullmac_runs_by_exp": {
+  "CORE": 1035,
+  "A1": 60,
+  "AA": 58,
+  "A5": 45,
+  "E2": 45,
+  "E3b": 27,
+  "A4": 27,
+  "A3": 27,
+  "A6": 18
+ },
+ "fullmac_outliers": 63,
+ "fullmac_excluded": 45,
+ "fullmac_excluded_by_exp": {
+  "CORE": 24,
+  "A3": 5,
+  "A5": 4,
+  "A4": 4,
+  "AA": 3,
+  "E2": 2,
+  "E3b": 2,
+  "A6": 1
+ },
+ "fullmac_steps_total": 7859,
+ "fullmac_steps_invalid": 190,
+ "fullmac_steps_overload_drain": 190,
+ "fullmac_steps_host_invalid": 0,
+ "fullmac_swap_max_gib": 10.923,
+ "fullmac_avail_median_gib": 2.73,
+ "fullmac_avail_min_gib": 0.72,
+ "fullmac_gate_timeout_runs": 21,
+ "fullmac_sens_cells_total": 216,
+ "fullmac_sens_no_exclusions_cells_changed": 3,
+ "fullmac_A5_cache_dropped_true": 0,
+ "core_cells": 69,
+ "core_configs": 23,
+ "pgvector_cells_replaced_by_pgrep5": 21,
+ "gm_duckdb": 388,
+ "gm_lancedb": 1039,
+ "gm_pgvector": 816,
+ "gm_duckdb_c100k": 544,
+ "gm_lancedb_c100k": 1295,
+ "gm_pgvector_c100k": 1831,
+ "cells_c100k": 36,
+ "gm_duckdb_c300k": 268,
+ "gm_lancedb_c300k": 817,
+ "gm_pgvector_c300k": 338,
+ "cells_c300k": 33,
+ "wins_incl_ties_duckdb": 2,
+ "wins_outright_duckdb": 0,
+ "wins_incl_ties_lancedb": 51,
+ "wins_outright_lancedb": 20,
+ "wins_incl_ties_pgvector": 48,
+ "wins_outright_pgvector": 18,
+ "tied_cells": 31,
+ "exclrule_gm_duckdb": 388,
+ "exclrule_gm_lancedb": 1039,
+ "exclrule_gm_pgvector": 816,
+ "exclrule_gm_duckdb_c100k": 544,
+ "exclrule_gm_lancedb_c100k": 1295,
+ "exclrule_gm_pgvector_c100k": 1831,
+ "exclrule_cells_c100k": 36,
+ "exclrule_gm_duckdb_c300k": 268,
+ "exclrule_gm_lancedb_c300k": 817,
+ "exclrule_gm_pgvector_c300k": 338,
+ "exclrule_cells_c300k": 33,
+ "exclrule_wins_incl_ties_duckdb": 2,
+ "exclrule_wins_outright_duckdb": 0,
+ "exclrule_wins_incl_ties_lancedb": 51,
+ "exclrule_wins_outright_lancedb": 20,
+ "exclrule_wins_incl_ties_pgvector": 48,
+ "exclrule_wins_outright_pgvector": 18,
+ "exclrule_tied_cells": 31,
+ "wins_incl_ties_by_ds_k": {
+  "c100k_k10": {
+   "duckdb": 0,
+   "lancedb": 8,
+   "pgvector": 18,
+   "cells": 18
+  },
+  "c100k_k100": {
+   "duckdb": 0,
+   "lancedb": 11,
+   "pgvector": 18,
+   "cells": 18
+  },
+  "c300k_k10": {
+   "duckdb": 0,
+   "lancedb": 14,
+   "pgvector": 11,
+   "cells": 15
+  },
+  "c300k_k100": {
+   "duckdb": 2,
+   "lancedb": 18,
+   "pgvector": 1,
+   "cells": 18
+  }
+ },
+ "gm_by_ds_k": {
+  "c100k_k10": {
+   "duckdb": 544,
+   "lancedb": 1796,
+   "pgvector": 2743,
+   "cells": 18
+  },
+  "c100k_k100": {
+   "duckdb": 544,
+   "lancedb": 933,
+   "pgvector": 1222,
+   "cells": 18
+  },
+  "c300k_k10": {
+   "duckdb": 332,
+   "lancedb": 1330,
+   "pgvector": 1158,
+   "cells": 15
+  },
+  "c300k_k100": {
+   "duckdb": 224,
+   "lancedb": 544,
+   "pgvector": 121,
+   "cells": 18
+  }
+ },
+ "gm_by_store_lang": {
+  "duckdb": {
+   "python": 287,
+   "go": 541,
+   "rust": 377
+  },
+  "lancedb": {
+   "python": 902,
+   "go": 1018,
+   "rust": 1220
+  },
+  "pgvector": {
+   "python": 629,
+   "go": 988,
+   "rust": 876
+  }
+ },
+ "median_best_over_worst_language_ratio": {
+  "duckdb": 2.0,
+  "lancedb": 1.0,
+  "pgvector": 2.0
+ },
+ "median_best_over_worst_store_ratio": {
+  "python": 4.0,
+  "go": 2.0,
+  "rust": 4.0
+ },
+ "c300k_k100_pgvector_range": [
+  25.0,
+  400.0
+ ],
+ "c300k_k100_lancedb_range": [
+  400.0,
+  1600.0
+ ],
+ "pgvector_cells_with_zero_mst": 0,
+ "centre_final": {
+  "go/duckdb": 1037.0,
+  "go/lancedb": 1600.0,
+  "go/pgvector": 2690.0,
+  "python/duckdb": 482.5,
+  "python/lancedb": 1600.0,
+  "python/pgvector": 2466.0,
+  "rust/duckdb": 800.0,
+  "rust/lancedb": 2466.0,
+  "rust/pgvector": 2933.0
+ },
+ "centre_pgvector_old_median": {
+  "go": 366.0,
+  "python": 616.0,
+  "rust": 518.0
+ },
+ "centre_pgvector_ratio_new_over_old": {
+  "go": 7.35,
+  "python": 4.0,
+  "rust": 5.66
+ },
+ "rerun_python_rep0": {
+  "mst": 258.0,
+  "max_pre_swap_gib": 2.588,
+  "min_avail_gib": 2.0
+ },
+ "rerun_other_max_pre_swap_gib": 0.335,
+ "rerun_go_lancedb": {
+  "msts": [
+   1600.0,
+   1600.0,
+   1600.0,
+   1600.0,
+   1600.0
+  ],
+  "crashes": 5,
+  "first_crash_rps": [
+   1744.0
+  ],
+  "p50_100_median": 2.601313,
+  "p99_100_median": 3.35425584
+ },
+ "fullmac_go_lancedb_p50_p99_100": [
+  3.93734375,
+  7.1004776599999975
+ ],
+ "fullmac_E2_pgvector_swap_gib_range": [
+  0.279,
+  2.405
+ ],
+ "fullmac_E2_pgvector_min_avail_gib_range": [
+  1.17,
+  3.25
+ ],
+ "rerun_pgvector_min_avail_gib_range": [
+  2.0,
+  2.93
+ ],
+ "varshare_S": 0.692,
+ "varshare_L": 0.053,
+ "varshare_LxS": 0.072,
+ "varshare_resid": 0.117,
+ "varshare_store_gt_lang": "23/24",
+ "varshare_centre_config": {
+  "L": 0.059,
+  "S": 0.767,
+  "LxS": 0.05,
+  "resid": 0.124
+ },
+ "varshare_configs_lang_ge_store": [
+  "c100k|R0.99|k10|ids"
+ ],
+ "varshare_oldcentre_S": 0.65,
+ "varshare_oldcentre_L": 0.053,
+ "varshare_oldcentre_LxS": 0.081,
+ "varshare_oldcentre_resid": 0.132,
+ "varshare_oldcentre_store_gt_lang": "23/24",
+ "pgscan_runs": 69,
+ "pgscan_moved": 21,
+ "pgscan_moved_c300k": 20,
+ "pgscan_crash_runs": 0,
+ "pgscan_host_invalid_steps": 0,
+ "pgrep5_cells": 21,
+ "pgrep5_verdicts": {
+  "neither": 8,
+  "pgscan confirmed": 8,
+  "old confirmed": 5
+ },
+ "pgrep5_runs": 105,
+ "pgrep5_contaminated_runs": 10,
+ "pgrep5_crash_runs": 0,
+ "pgrep5_host_invalid_steps": 0,
+ "pgrep5_contam_window": [
+  "2026-10-28T10:31:21",
+  "2026-10-28T13:07:06"
+ ],
+ "gm_pgvector_excl_contaminated": 823,
+ "gm_pgvector_old_fullmac": 1039,
+ "gm_pgvector_old_fullmac_c300k": 560,
+ "ladder_test_runs": 24,
+ "ladder_test_contaminated": 0,
+ "ladder_test_gm_start25": 168,
+ "ladder_test_gm_start100": 168,
+ "ladder_test_medians": {
+  "go c300k|R0.95|k100|ids": {
+   "start25": 200.0,
+   "start100": 100.0
+  },
+  "go c300k|R0.9|k100|doc": {
+   "start25": 200.0,
+   "start100": 200.0
+  },
+  "python c300k|R0.99|k100|doc": {
+   "start25": 100.0,
+   "start100": 100.0
+  },
+  "rust c300k|R0.95|k100|ids": {
+   "start25": 200.0,
+   "start100": 400.0
+  }
+ },
+ "ladder_test_window": [
+  "2026-10-28T16:12:08",
+  "2026-10-28T17:59:29"
+ ],
+ "go_lancedb_share_first_sat_err_gt90": 0.863,
+ "go_lancedb_runs_for_share": 117,
+ "other_cells_share_err_gt90_max": 0.0,
+ "rerun_server_log_pthread_eagain_lines": 6,
+ "rerun_go_lancedb_crash_dumps": [
+  {
+   "goroutines": 26,
+   "in_syscall": 22,
+   "cgo_fn": [
+    "simple_lancedb_table_select_query_ipc",
+    22
+   ],
+   "max_m": 1501
+  },
+  {
+   "goroutines": 1520,
+   "in_syscall": 1519,
+   "cgo_fn": [
+    "simple_lancedb_table_select_query_ipc",
+    1519
+   ],
+   "max_m": 1521
+  },
+  {
+   "goroutines": 1517,
+   "in_syscall": 1516,
+   "cgo_fn": [
+    "simple_lancedb_table_select_query_ipc",
+    1516
+   ],
+   "max_m": 1521
+  },
+  {
+   "goroutines": 1520,
+   "in_syscall": 1519,
+   "cgo_fn": [
+    "simple_lancedb_table_select_query_ipc",
+    1519
+   ],
+   "max_m": 1521
+  },
+  {
+   "goroutines": 1765,
+   "in_syscall": 1764,
+   "cgo_fn": [
+    "simple_lancedb_table_select_query_ipc",
+    1764
+   ],
+   "max_m": 1766
+  }
+ ],
+ "fullmac_server_log_pthread_eagain": 138,
+ "fullmac_server_log_sigabrt": 112,
+ "fullmac_server_log_max_m": 1910,
+ "go_lancedb_threads_max_by_rate": {
+  "25": 328,
+  "50": 328,
+  "100": 328,
+  "200": 328,
+  "400": 328,
+  "800": 328,
+  "1600": 328,
+  "3200": 2048
+ },
+ "go_lancedb_error_by_rate_median": {
+  "25": 0.0,
+  "50": 0.0,
+  "100": 0.0,
+  "200": 0.0,
+  "400": 0.0,
+  "800": 0.0,
+  "1600": 0.0,
+  "1744": 1.0,
+  "1902": 1.0,
+  "2262": 1.0,
+  "3200": 0.999
+ },
+ "pgvector_server_threads_max_overall": {
+  "go": 30,
+  "rust": 9
+ }
+}

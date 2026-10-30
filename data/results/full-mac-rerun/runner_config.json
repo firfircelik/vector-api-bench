@@ -1,0 +1,58 @@
+{
+ "tag": "full-mac-rerun",
+ "plan": null,
+ "only_exp": null,
+ "only_kind": null,
+ "limit": null,
+ "step_s": 30,
+ "warmup_s": 20,
+ "warmup_rps": 50,
+ "cooldown_s": 3,
+ "cold_s": 60,
+ "bisect_steps": 3,
+ "ladder_start": 25,
+ "ladder_max": 25600,
+ "gate_max_s": 180,
+ "max_attempts": 3,
+ "filter": null,
+ "started": "2026-10-27T18:46:49",
+ "slo_p99_ms": 100.0,
+ "body_capture_max_rps": 1600,
+ "ef_grid": {
+  "10": [
+   10,
+   16,
+   24,
+   32,
+   48,
+   64,
+   96,
+   128,
+   192,
+   256,
+   384,
+   512
+  ],
+  "100": [
+   100,
+   128,
+   160,
+   192,
+   256,
+   320,
+   384,
+   512,
+   768,
+   1000
+  ]
+ },
+ "n_calib": 200,
+ "sut_cpus": "0-5",
+ "loadgen_cpus": "6-7",
+ "os": "darwin",
+ "pinned": false,
+ "mem_need_gib": {
+  "c100k": 0.8,
+  "c300k": 1.0
+ }
+}

@@ -1,0 +1,93 @@
+# vector-api-bench: Mac mini data and analysis behind "Python vs Go vs Rust for a Vector Search API: the Language Explained 5% of the Throughput" (DEV.to, Nov 2026)
+
+FastAPI (Python) vs Go net/http vs Rust axum, each in front of pgvector, DuckDB VSS and LanceDB: a 3 x 3 factorial
+semantic-search API benchmark on one Mac mini (Apple M2, 4P + 4E cores, 8 GiB). Everything here is what the article's
+numbers were computed from. Raw per-step JSONL for the main run is about 1.7 GB and is not in this repo; the per-run
+summary of every run is (`data/analysis/runs_cells.csv`).
+
+## Hardware and pinned versions
+
+- Host: see `hardware.txt`. One host only (an 8 GiB Mac mini, a constrained machine); nothing is pooled
+  across hosts.
+- Full version table: `docs/VERSIONS.md` (section "macOS / arm64"). The short list:
+  - Python 3.13.12 (uv-managed), FastAPI 0.159.1, uvicorn 0.54.0 (httptools + uvloop), psycopg 3.3.6
+  - Go 1.27.3, net/http (stdlib ServeMux), pgx v5.11.0 + pgvector-go v0.4.1, duckdb-go v2.10506.0,
+    lancedb-go vendored at fa14ce29 with its Rust core rebuilt against lancedb 0.40.0
+  - Rust 1.99.1 (rustup, pinned in `api/rust/rust-toolchain.toml`), axum 0.8 on tokio 1, tokio-postgres, `duckdb` crate
+    1.10506.1, `lancedb` crate 0.40.0
+  - PostgreSQL 17.11 and pgvector 0.8.0, both built from source; shared_buffers 1GB on the Mac
+  - DuckDB 1.5.6 in all three languages (the Rust crate has no 2.0 build yet), VSS extension b833341
+  - LanceDB 0.40.0, index IVF_HNSW_FLAT with one partition (a single HNSW graph)
+  - vegeta v12.13.0 as the open-loop load generator
+- Data: Cohere Wikipedia embeddings (768-d) as packaged by VectorDBBench. c100k = cohere_small_100k; c300k = a seeded
+  (20261022) random 300k subset of cohere_medium_1m. Exact top-100 ground truth by brute force.
+
+No Docker or containers anywhere. Postgres runs from a private data directory with `pg_ctl`; everything else is uv,
+go and cargo, installed into the repo directory (`bench/mac_setup.sh`, `bench/macenv.sh`).
+
+## What was measured
+
+- MST (max sustainable throughput): the highest offered rate whose 30 s step sent >= 98 % of the offered requests with
+  errors <= 0.1 % and p99 <= 100 ms. 20 s warm-up at 50 rps before every run (discarded), 3 s cool-down between steps,
+  10 s client timeout, fresh server process per run.
+- Equal recall, not equal parameters: each store's ef was calibrated on 200 queries to reach the target recall (0.90,
+  0.95, 0.99); recall@k is scored on the held-out queries from the actual HTTP responses.
+- Centre cell (E2): c300k, R 0.95, k 10, ids only, JSON. Ladder 25, 50, ... then 3 bisection steps.
+- CORE: 2 scales x 3 recalls x 2 k x 2 payloads = 24 configs (23 + the centre) x 9 cells x 5 reps, doubling ladder.
+- Run order: blocks of one replicate each, cell order from a Williams design drawn at random per block, seed 20261022.
+- Warm cache everywhere except the A5 ablation (fresh process; the Mac page cache could not be dropped).
+
+## Layout
+
+```
+api/            the three API servers (identical /search contract)
+bench/          runner.py (the measurement harness, Mac version), plan.py, rerun_*.sh (follow-up runs), rerun_monitor.sh
+stores/         index builds
+scripts/        dataset download, subset, ground truth
+analysis/       analysis.py (main run), rerun_centre.py, pgscan_vs_full_mac.py, pgrep5_vs_full_mac.py,
+                pgrep5_recompute.py, ladder_start_test.py, article_numbers.py, contamination_check.py, charts.py
+analysis/out/   article_numbers.json and the final tables the article quotes
+data/analysis/  per-run summaries and intermediate CSVs
+data/results/full-mac-rerun/  raw JSONL, plan and the 2 s host monitor of the clean centre rerun (20 runs)
+logs/           Go/LanceDB crash markers and one crash-dump excerpt
+```
+
+## Reproduce the article numbers from this repo
+
+```bash
+uv venv -p 3.13 .venv && uv pip install -p .venv/bin/python pandas numpy matplotlib
+.venv/bin/python analysis/article_numbers.py   # reads data/, writes analysis/out/article_numbers.json
+.venv/bin/python analysis/charts.py            # writes charts/*.png
+```
+
+The crash-dump counts in `article_numbers.json` need the full 25 MB `server.log`; from this repo they are computed on
+the excerpt only. `analysis.py`, `contamination_check.py` and the comparison scripts need the raw JSONL trees.
+
+## Reproduce the measurements (macOS, arm64)
+
+```bash
+bench/mac_setup.sh                 # private toolchains, Postgres 17.11 + pgvector 0.8.0 from source, DuckDB VSS
+source bench/macenv.sh
+scripts/fetch_data.sh cohere_small_100k cohere_medium_1m
+python scripts/prepare.py cohere_small_100k c100k
+python scripts/prepare.py cohere_medium_1m c300k 300000 20261022
+python scripts/ground_truth.py c100k 100 && python scripts/ground_truth.py c300k 100
+python bench/plan.py --centre c300k --tag full-mac --scales c100k,c300k --a6-workers 2
+#   -> results/full-mac/plan.jsonl, 1,543 runs, sha256 f495422c...c013 (byte-identical to the plan that was run)
+bench/mac_longrun.sh full-mac      # caffeinate -dimsu + bench/longrun.sh -> bench/runner.py --gate-max-s 180
+```
+
+The runner builds the indexes (E1) and calibrates ef per store and recall target (E0) as part of the plan.
+
+A full pass is 1,543 runs and took about 88 hours on the Mac mini.
+
+Not included: `api/go/third_party/lancedb-go` (the vendored upstream at fa14ce29 with its Rust core rebuilt against
+lancedb 0.40.0; see `docs/VERSIONS.md`), the datasets, and the raw JSONL of the main run and the pgvector reruns.
+
+## Known issues, stated up front
+
+- `runner.py` writes a step's `started` field when the step ends, not when it starts. Anything that aligns host
+  monitor samples to steps must use `[started - step_wall_s, started]`. `article_numbers.py` and `charts.py` do;
+  the earlier pgrep5 contamination check did not (see `analysis/contamination_check.py` for the corrected version).
+- CORE MSTs have 2x resolution; only the centre cell has bisection.
+- The Go/LanceDB MST is crash-bounded (the process aborts at the 2048-thread limit), so 1600 rps is a lower bound.

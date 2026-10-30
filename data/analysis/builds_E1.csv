@@ -1,0 +1,22 @@
+store,dataset,m,rep,scratch,reused_setup_build,build_s,index_bytes,file_bytes,peak_rss_gib,version
+duckdb,c100k,16,2,True,,23.23,,854863872.0,1.167,"duckdb v1.5.6, vss b833341"
+pgvector,c300k,16,2,True,,144.238,1228775424.0,,8.443,pgvector 0.8.0
+lancedb,c100k,16,2,True,,26.442,322919913.0,711519133.0,1.575,lancedb 0.40.0
+lancedb,c100k,16,0,False,True,26.948,322919913.0,711104862.0,1.449,lancedb 0.40.0
+pgvector,c300k,32,0,False,,242.195,1228775424.0,,9.577,pgvector 0.8.0
+lancedb,c100k,16,1,True,,27.305,322913641.0,711205534.0,1.268,lancedb 0.40.0
+pgvector,c100k,16,2,True,,30.557,409591808.0,,3.38,pgvector 0.8.0
+duckdb,c300k,32,0,False,,116.881,,2669162496.0,1.986,"duckdb v1.5.6, vss b833341"
+duckdb,c100k,16,0,False,True,20.585,,856436736.0,1.568,"duckdb v1.5.6, vss b833341"
+duckdb,c300k,16,2,True,,82.653,,2628792320.0,2.665,"duckdb v1.5.6, vss b833341"
+duckdb,c300k,16,0,False,True,77.948,,2628530176.0,2.433,"duckdb v1.5.6, vss b833341"
+lancedb,c300k,16,1,True,,98.784,971070247.0,2135983396.0,1.98,lancedb 0.40.0
+duckdb,c300k,16,1,True,,81.903,,2627481600.0,2.547,"duckdb v1.5.6, vss b833341"
+pgvector,c100k,16,0,False,True,27.104,409591808.0,,4.181,pgvector 0.8.0
+pgvector,c300k,16,0,False,,156.775,1228775424.0,,8.444,pgvector 0.8.0
+duckdb,c100k,16,1,True,,23.556,,855388160.0,1.281,"duckdb v1.5.6, vss b833341"
+lancedb,c300k,16,0,False,,97.64,971057191.0,2135145571.0,1.775,lancedb 0.40.0
+pgvector,c100k,16,1,True,,37.187,409591808.0,,3.115,pgvector 0.8.0
+lancedb,c300k,32,0,False,,224.368,1014190759.0,2180006179.0,1.919,lancedb 0.40.0
+pgvector,c300k,16,1,True,,176.315,1228775424.0,,8.423,pgvector 0.8.0
+lancedb,c300k,16,2,True,,89.874,971057191.0,2134193251.0,2.25,lancedb 0.40.0

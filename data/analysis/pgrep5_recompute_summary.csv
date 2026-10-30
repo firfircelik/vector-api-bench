@@ -1,0 +1,5 @@
+scenario,gm_duckdb,gm_lancedb,gm_pgvector,wins_incl_ties_D,wins_incl_ties_L,wins_incl_ties_P,tied_cells,outright_D,outright_L,outright_P,var_S,var_L,var_LxS,var_resid,store_gt_lang_configs,pgv_gm_c100k,pgv_gm_c300k,lan_gm_c300k
+old full-mac 5-rep,388,1039,1039,2,50,54,35,0,15,19,0.664,0.046,0.056,0.161,24/24,1831,560,817
+pgscan 1-rep,388,1039,841,2,49,47,29,0,20,20,0.664,0.046,0.056,0.161,24/24,1866,353,817
+pgrep5 all reps,388,1039,816,2,51,48,31,0,20,18,0.65,0.053,0.081,0.132,23/24,1831,338,817
+pgrep5 excl. contaminated,388,1039,823,2,51,47,31,0,20,18,0.65,0.053,0.081,0.13,24/24,1831,344,817

@@ -1,0 +1,10 @@
+lang,store,source,mst_median,reps,n_used,old_fullmac_median,old_reps
+go,duckdb,full-mac,1037.0,800 800 1131 1037 1131,5,1037.0,
+go,lancedb,full-mac,1600.0,1600 1600 1600 1600,4,1600.0,
+go,pgvector,full-mac-rerun,2690.0,2690 2690 2690 2690 2690,5,366.0,366 153 1037 128 366
+python,duckdb,full-mac,482.5,400 400 672 565,4,482.5,
+python,lancedb,full-mac,1600.0,1600 475 1600 1600 1600,5,1600.0,
+python,pgvector,full-mac-rerun,2466.0,258 2466 2466 2466 2466,4,616.0,475 475 2262 616 616
+rust,duckdb,full-mac,800.0,800 435 800 565 800,5,800.0,
+rust,lancedb,full-mac,2466.0,2466 2466 2690 1466 2466,5,2466.0,
+rust,pgvector,full-mac-rerun,2933.0,2933 2933 2933 2933 2933,5,518.0,435 400 2690 518 672
