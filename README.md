@@ -1,4 +1,4 @@
-# vector-api-bench: Mac mini data and analysis behind "Python vs Go vs Rust for a Vector Search API: the Language Explained 5% of the Throughput" (DEV.to, Nov 2026)
+# vector-api-bench: Mac mini data and analysis behind "Python vs Go vs Rust for a Vector Search API: the Language Explained 5% of the Throughput Variance" (DEV.to, Nov 2026)
 
 FastAPI (Python) vs Go net/http vs Rust axum, each in front of pgvector, DuckDB VSS and LanceDB: a 3 x 3 factorial
 semantic-search API benchmark on one Mac mini (Apple M2, 4P + 4E cores, 8 GiB). Everything here is what the article's
