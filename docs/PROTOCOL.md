@@ -80,7 +80,7 @@ Host: Mac mini, Apple M2 (4 performance + 4 efficiency cores), 8 GiB RAM, macOS 
 `caffeinate -dimsu` for the life of the run. Started by the user LaunchAgent `com.firat.vectorapibench`
 (`bench/mac_agent.sh`, `bench/mac_longrun.sh`), restarted by launchd only after a crash; the runner resumes.
 
-### Deviations from the base protocol (decided before any full-mac data)
+### Deviations from the base protocol (1 to 7 decided before any full-mac data; 8 documented afterwards)
 
 1. **No CPU pinning.** macOS has no CPU affinity API on Apple silicon, so `taskset` has no equivalent. Servers,
    Postgres, sidecars and vegeta share all 8 cores, and P/E core placement is left to the macOS scheduler.
@@ -109,6 +109,15 @@ Host: Mac mini, Apple M2 (4 performance + 4 efficiency cores), 8 GiB RAM, macOS 
    as in the base protocol.
 7. **Toolchains.** These are private to the repo (`bench/macenv.sh`): rustup and cargo, the Go toolchain, the uv
    Python, vegeta, and the DuckDB extension directory (`HOME=run/home` for benchmark processes). See VERSIONS.md.
+
+8. **Runner settings as actually run (documented on November 1, 2026, after the data, to match the code).** The base
+   text above says "30 s warmup at the lowest step; step order shuffled per rep" and a ladder from 100 rps. What
+   `bench/runner.py` did in every Mac run (`runner_config.json` of each run): 20 s warm-up at 50 rps, discarded; an
+   ascending doubling ladder on the grid 25, 50, 100 ... 25,600 rps with 3 s cool-down, stopping at the first
+   saturated step; the centre cell (E2) starts at 25 and adds 3 geometric bisection steps; other cells start at the
+   grid step at or below 1/16 of the centre MST of the same language and store, and walk down by halving if that first
+   step is already saturated. The permutation tests, bootstrap CIs and omega-squared estimates in "Statistics" were not
+   run for the article; it reports a descriptive two-way sum-of-squares decomposition of log MST per configuration.
 
 ### Plan reductions (Firat's rule: every reduction justified, in priority order)
 

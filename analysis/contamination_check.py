@@ -5,7 +5,7 @@ pageins/s > 4x the same cell's overnight (pgscan) rate."""
 import os, json, glob
 from pathlib import Path
 import numpy as np, pandas as pd
-DATA = Path(os.environ.get("DATA", "/workspace/vector-api-bench-mac"))
+DATA = Path(os.environ["DATA"])
 def steps(d):
     rows = []
     for f in glob.glob(str(DATA / f"results/{d}/runs/*.jsonl")):

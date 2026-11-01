@@ -1,20 +1,20 @@
-"""Charts for the Nov 9 article. Reads out/*.csv from article_numbers.py plus the raw rerun host_monitor.
-Usage: DATA=/path/to/vector-api-bench-mac python3 charts.py  -> ../../charts/*.png (or $CHARTS)"""
+"""Charts for the article. Reads out/*.csv from article_numbers.py plus the raw rerun host_monitor.
+Usage: python3 analysis/charts.py  -> charts/*.png (DATA defaults to ./data, CHARTS to ./charts)"""
 import os, json, glob
 from pathlib import Path
 import numpy as np, pandas as pd, matplotlib
 matplotlib.use("Agg"); import matplotlib.pyplot as plt
 _gist = Path(__file__).resolve().parent.parent / "data"
-DATA = Path(os.environ.get("DATA", _gist if (_gist / "analysis").exists() else "/workspace/vector-api-bench-mac")); A = DATA / "analysis"
+DATA = Path(os.environ.get("DATA", _gist)); A = DATA / "analysis"
 HERE = Path(__file__).resolve().parent; O = HERE / "out"
-CH = Path(os.environ.get("CHARTS", HERE.parent.parent / "charts")); CH.mkdir(exist_ok=True, parents=True)
+CH = Path(os.environ.get("CHARTS", HERE.parent / "charts")); CH.mkdir(exist_ok=True, parents=True)
 N = json.load(open(O / "article_numbers.json"))
 plt.rcParams.update({"font.size": 11, "axes.spines.top": False, "axes.spines.right": False, "figure.dpi": 150})
 SC = {"pgvector": "#336791", "lancedb": "#e07b39", "duckdb": "#9e9e2e"}; LANGS = ["python", "go", "rust"]
 LN = {"python": "Python / FastAPI", "go": "Go / net/http", "rust": "Rust / axum"}; SN = {"pgvector": "pgvector", "lancedb": "LanceDB", "duckdb": "DuckDB VSS"}
 gm = lambda x: float(np.exp(np.log(np.clip(np.asarray(x, float), 1, None)).mean()))
 M = pd.read_csv(O / "core_final_mst_median.csv").set_index(["config", "lang"])
-FOOT = "Mac mini M2, 8 GiB. MST = highest ladder step with p99 <= 100 ms at equal recall. Medians of 5 runs per cell."
+FOOT = "Mac mini M2, 8 GiB. MST = highest ladder step with >= 98% sent, <= 0.1% errors and p99 <= 100 ms, at equal recall. Medians of 5 runs per cell."
 
 # 1. geo-mean MST by store x language, c100k vs c300k
 fig, axs = plt.subplots(1, 2, figsize=(11, 4.6), sharey=True)
@@ -38,11 +38,11 @@ med = [V[c].median() * 100 for c, _ in parts]
 for j, (c, _) in enumerate(parts):
     ax.scatter(np.full(len(V), j) + np.random.default_rng(j).uniform(-0.15, 0.15, len(V)), V[c] * 100, s=14, color="#999", zorder=2)
 b = ax.bar(range(4), med, color=["#336791", "#e07b39", "#7a7a7a", "#c9c9c9"], alpha=0.85, zorder=1)
-ax.bar_label(b, labels=[f"{m:.0f} %" for m in med], padding=3)
+ax.bar_label(b, labels=[f"{m:.0f}%" for m in med], padding=3)
 ax.set_xticks(range(4), [n for _, n in parts]); ax.set_ylabel("share of variance in log MST (%)")
 ax.set_title(f"Store explains most of the throughput variance (median over {len(V)} configs)", fontsize=11)
-fig.text(0.01, 0.01, "Balanced two-way decomposition per configuration, 9 cells x 5 runs; dots = configurations. " + "Mac mini M2, 8 GiB.", fontsize=7.5, color="#555")
-fig.tight_layout(rect=(0, 0.04, 1, 1)); fig.savefig(CH / "fig2_variance_shares.png"); plt.close(fig)
+fig.text(0.01, 0.01, "Two-way ANOVA sums of squares of log MST, per configuration (9 cells x 5 runs). Mac mini M2, 8 GiB.\nBars = medians over 24 configs (medians per term, so they do not sum to 100%); dots = configs.", fontsize=7.5, color="#555")
+fig.tight_layout(rect=(0, 0.08, 1, 1)); fig.savefig(CH / "fig2_variance_shares.png"); plt.close(fig)
 
 # 3. Go/LanceDB thread count across the 1600 -> 3200 rps step (rerun, 5 reps)
 hm = pd.read_csv(DATA / "results/full-mac-rerun/host_monitor.csv", usecols=[0, 8], names=["ts", "procs"], header=0); hm["ts"] = pd.to_datetime(hm.ts)
@@ -71,8 +71,8 @@ ax.axvspan(-24, 0, color="#f3f3f3", zorder=0)
 ax.text(-23, 700, "end of the 1600 rps step\n(p99 ~2 ms, 0 errors)", fontsize=9, color="#555"); ax.text(4.5, 1500, "3200 rps step:\nprocess aborts\nwithin ~4 s", fontsize=9, color="#555")
 ax.set_xlim(-24, 20); ax.set_ylim(0, 2300); ax.set_xlabel("seconds from the start of the 3200 rps step"); ax.set_ylabel("OS threads in the API process")
 ax.set_title("Go / LanceDB: one OS thread per blocked cgo call, until the kernel says no", fontsize=11); ax.legend(frameon=False, fontsize=8, loc="upper right", bbox_to_anchor=(1.0, 0.62))
-fig.text(0.01, 0.01, "Centre cell (c300k, R 0.95, k 10), rerun 2026-10-27, n = 5 runs. Thread count sampled every ~2 s by host_monitor; 0 = process gone (SIGABRT). The 2 s sampler missed the run 1 peak; its Go crash dump shows thread m=1501.", fontsize=7.5, color="#555")
-fig.tight_layout(rect=(0, 0.04, 1, 1)); fig.savefig(CH / "fig3_go_lancedb_thread_ceiling.png"); plt.close(fig)
+fig.text(0.01, 0.01, "Centre cell (c300k, R 0.95, k 10), rerun 2026-10-27, n = 5 runs. Thread count sampled every ~2 s by host_monitor; 0 = process gone (SIGABRT).\nThe 2 s sampler missed the run 1 peak; its Go crash dump shows thread m=1501.", fontsize=7.5, color="#555")
+fig.tight_layout(rect=(0, 0.07, 1, 1)); fig.savefig(CH / "fig3_go_lancedb_thread_ceiling.png"); plt.close(fig)
 
 # 4. centre pgvector: memory-pressure runs vs clean rerun
 C = pd.read_csv(O / "centre_final.csv"); C = C[C.store == "pgvector"].set_index("lang")
@@ -83,13 +83,13 @@ for i, l in enumerate(LANGS):
     ax.scatter(np.full(len(o), i - 0.18) + np.linspace(-0.05, 0.05, len(o)), o.mst, color="#b0b0b0", edgecolor="#555", s=40, zorder=3, label="first run, Oct 23 (swap 0.3 to 2.4 GiB)" if i == 0 else None)
     clean = n[~((n.lang == "python") & (n.rep == 0))]; bad = n[(n.lang == "python") & (n.rep == 0)]
     ax.scatter(np.full(len(clean), i + 0.18) + np.linspace(-0.05, 0.05, len(clean)), clean.mst, color="#336791", s=40, zorder=3, label="clean rerun, Oct 27 (swap 0.34 GiB)" if i == 0 else None)
-    if len(bad): ax.scatter([i + 0.18], bad.mst, marker="x", color="crimson", s=60, zorder=4, label="rerun rep 1, swap 2.6 GiB (excluded)")
+    if len(bad): ax.scatter([i + 0.18], bad.mst, marker="x", color="crimson", s=60, zorder=4, label="first rerun run, swap 2.6 GiB (excluded)")
     ax.hlines(o.mst.median(), i - 0.3, i - 0.06, color="#555"); ax.hlines(clean.mst.median(), i + 0.06, i + 0.3, color="#336791")
     ax.text(i, 3150, f"{o.mst.median():.0f} -> {clean.mst.median():.0f}", ha="center", fontsize=9)
 ax.set_xticks(range(3), [LN[l] for l in LANGS]); ax.set_ylabel("MST (rps), ladder + bisection"); ax.set_ylim(0, 3400)
 ax.set_title("Centre cell, pgvector: same code, same data, different free memory", fontsize=11); ax.legend(frameon=False, fontsize=8, loc="center right")
-fig.text(0.01, 0.01, "c300k, R 0.95, k 10, ids. n = 5 runs per group; lines = medians. pgvector index 1.23 GB > shared_buffers 1 GB, so it lives in the OS page cache.", fontsize=7.5, color="#555")
-fig.tight_layout(rect=(0, 0.04, 1, 1)); fig.savefig(CH / "fig4_centre_pgvector_memory_pressure.png"); plt.close(fig)
+fig.text(0.01, 0.01, "c300k, R 0.95, k 10, ids. n = 5 runs per group (clean rerun Python: 4); lines = medians.\npgvector index 1.23 GB > shared_buffers 1 GB, so part of it has to come from the OS page cache.", fontsize=7.5, color="#555")
+fig.tight_layout(rect=(0, 0.08, 1, 1)); fig.savefig(CH / "fig4_centre_pgvector_memory_pressure.png"); plt.close(fig)
 
 # 5. winner map: 23 configs x 3 languages
 W = M.copy(); cfgs = sorted(W.index.get_level_values(0).unique(), key=lambda c: (c[:5], int(c.split("|k")[1].split("|")[0]), c))

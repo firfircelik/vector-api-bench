@@ -1,7 +1,7 @@
 """Load data/<name>/base.npy into Postgres + pgvector and build an HNSW index.
 
 Usage: python stores/load_pgvector.py <name> [m=16] [ef_construction=64]
-Env: PGHOST (default /workspace/vector-api-bench/run/pgsock), PGPORT=5544, PGUSER=bench, PGDATABASE=vec
+Env: PGHOST (default <repo>/run/pgsock), PGPORT=5544, PGUSER=bench, PGDATABASE=vec
 Prints one JSON line: load_s, build_s, table/index bytes. Table: items_<name>_m<m>_efc<efc>.
 """
 import json, os, sys, time

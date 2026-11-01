@@ -1,15 +1,15 @@
-"""Every number in the Nov 9 article, recomputed from the Mac result CSVs and raw logs.
+"""Every number in the article, recomputed from the Mac result CSVs and raw logs.
 Inputs: the analysis CSVs produced by analysis.py, pgscan_vs_full_mac.py, pgrep5_vs_full_mac.py,
 pgrep5_recompute.py, rerun_centre.py, ladder_start_test.py (same MST definition: highest offered
 rate with a valid step, sent >= 98 %, errors <= 0.1 %, p99 <= 100 ms).
-Usage: DATA=/path/to/vector-api-bench-mac python3 article_numbers.py  -> out/article_numbers.json + CSVs"""
+Usage: python3 analysis/article_numbers.py  -> analysis/out/article_numbers.json + CSVs (DATA defaults to ./data)"""
 import os, re, json, glob
 from collections import Counter
 from pathlib import Path
 import numpy as np, pandas as pd
 
 _gist = Path(__file__).resolve().parent.parent / "data"
-DATA = Path(os.environ.get("DATA", _gist if (_gist / "analysis").exists() else "/workspace/vector-api-bench-mac")); A = DATA / "analysis"
+DATA = Path(os.environ.get("DATA", _gist)); A = DATA / "analysis"
 OUT = Path(os.environ.get("OUT", Path(__file__).resolve().parent / "out")); OUT.mkdir(exist_ok=True, parents=True)
 N = {}
 def put(k, v): N[k] = v.item() if hasattr(v, "item") else v
